@@ -1,8 +1,9 @@
 <div class="card m-4">
     <div class="card-header">
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-            <div class="btn-group me-2" role="group" aria-label="First group">
-                <button type="button" (click)="conectar()" *ngIf="!conectado" class="btn btn-success">Conectar</button>
+            <div *ngIf="!conectado" class="btn-group me-2" role="group" aria-label="First group">
+                <input type="text" [(ngModel)]="mensaje.username" class="form-control" placeholder="Tu username" name="username">
+                <button type="button" (click)="conectar()" [disabled]="!mensaje.username" class="btn btn-success">Conectar</button>
             </div>
             <div class="btn-group me-2" role="group" aria-label="Second group">
                 <button type="button" (click)="desconectar()" *ngIf="conectado" class="btn btn-danger">Cerrar chat</button>
@@ -12,7 +13,8 @@
     <div class="card-body" *ngIf="conectado">
         <ul class="list-group list-group-flush">
             <li *ngFor="let mensaje of mensajes" class="list-group-item text-muted border-bottom-0">
-                <b>{{ mensaje.fecha | date: 'shortTime'}}:</b> {{ mensaje.texto }}
+                <span *ngIf="mensaje.tipo == 'NUEVO_USUARIO'"><b>{{ mensaje.fecha | date: 'shortTime'}}</b>@ {{ mensaje.texto }} {{ mensaje.username }}</span>
+                <span *ngIf="mensaje.tipo == 'MENSAJE'"><b>{{ mensaje.fecha | date: 'shortTime'}}:</b> <i class="d-block">{{ mensaje.username }} dice:</i> {{ mensaje.texto }}</span>
             </li>
         </ul>
     </div>

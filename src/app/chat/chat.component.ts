@@ -33,7 +33,13 @@ export class ChatComponent implements OnInit {
         let mensaje: MensajeModel = JSON.parse(e.body) as MensajeModel;
         mensaje.fecha = new Date(mensaje.fecha!);//*Como viene en milisegundos, lo convertimos
         this.mensajes.push(mensaje);
-        console.log(mensaje);  
+        console.log(mensaje);
+      });
+
+      this.mensaje.tipo = 'NUEVO_USUARIO';
+      this.client.publish({
+        destination: '/app/mensaje',
+        body: JSON.stringify(this.mensaje),
       });
     }
 
@@ -53,6 +59,7 @@ export class ChatComponent implements OnInit {
   }
 
   enviarMensaje(): void {
+    this.mensaje.tipo = 'MENSAJE';
     this.client.publish({
       destination: '/app/mensaje',
       body: JSON.stringify(this.mensaje),
