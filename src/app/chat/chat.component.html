@@ -10,13 +10,17 @@
         </div>
     </div>
     <div class="card-body" *ngIf="conectado">
-
+        <ul class="list-group list-group-flush">
+            <li *ngFor="let mensaje of mensajes" class="list-group-item text-muted border-bottom-0">
+                <b>{{ mensaje.fecha | date: 'shortTime'}}:</b> {{ mensaje.texto }}
+            </li>
+        </ul>
     </div>
     <div class="card-footer" *ngIf="conectado">
         <form class="form-inline">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Escribe un mensaje..." name="texto">
-                <button type="submit" class="btn btn-primary input-group-text">Enviar</button>
+                <input type="text" [(ngModel)]="mensaje.texto" class="form-control" placeholder="Escribe un mensaje..." name="texto">
+                <button type="submit" (click)="enviarMensaje()" class="btn btn-primary input-group-text">Enviar</button>
             </div>
         </form>
     </div>
