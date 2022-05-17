@@ -13,8 +13,17 @@
     <div class="card-body" *ngIf="conectado">
         <ul class="list-group list-group-flush">
             <li *ngFor="let mensaje of mensajes" class="list-group-item text-muted border-bottom-0">
-                <span *ngIf="mensaje.tipo == 'NUEVO_USUARIO'"><b>{{ mensaje.fecha | date: 'shortTime'}}</b>@ {{ mensaje.texto }} {{ mensaje.username }}</span>
-                <span *ngIf="mensaje.tipo == 'MENSAJE'"><b>{{ mensaje.fecha | date: 'shortTime'}}:</b> <i class="d-block">{{ mensaje.username }} dice:</i> {{ mensaje.texto }}</span>
+                <span *ngIf="mensaje.tipo == 'NUEVO_USUARIO'">
+                    <b>{{ mensaje.fecha | date: 'shortTime'}}</b>@ {{ mensaje.texto }} 
+                    <span [ngStyle]="{'color': mensaje.color}">{{ mensaje.username }}</span>
+                </span>
+                <span *ngIf="mensaje.tipo == 'MENSAJE'"><b>
+                    {{ mensaje.fecha | date: 'shortTime'}}:</b> 
+                    <i class="d-block">
+                        <span [ngStyle]="{'color': mensaje.color}">{{ mensaje.username }}</span> dice:
+                    </i> 
+                    {{ mensaje.texto }}
+                </span>
             </li>
         </ul>
     </div>

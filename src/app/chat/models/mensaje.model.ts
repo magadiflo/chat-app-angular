@@ -3,4 +3,5 @@ export class MensajeModel {
     fecha?: Date;
     username?: string;
     tipo?: string;
+    color?: string;
 }
