@@ -11,6 +11,7 @@ import * as SockJS from 'sockjs-client';
 export class ChatComponent implements OnInit {
 
   private client: Client = new Client();
+  conectado: boolean = false;
 
   constructor() { }
 
@@ -22,8 +23,22 @@ export class ChatComponent implements OnInit {
     //Escuchar cuando nos conectamos o desconectamos
     this.client.onConnect = (frame: any) => {
       console.log('Conectados: ' + this.client.connected + ' : ' + frame);
+      this.conectado = true;
     }
+    
+    this.client.onDisconnect = (frame: any) => {
+      console.log('Desconectados: ' + !this.client.connected + ' : ' + frame);
+      this.conectado = false;
+    }
+    
+  }
+
+  conectar(): void {
     this.client.activate();
+  }
+
+  desconectar(): void {
+    this.client.deactivate();
   }
 
 }
