@@ -16,10 +16,13 @@ export class ChatComponent implements OnInit {
   mensaje: MensajeModel = new MensajeModel();
   mensajes: MensajeModel[] = [];
   escribiendo: string = '';
+  clienteId!: string;
 
   constructor() { }
 
   ngOnInit(): void {
+    this.clienteId = 'id-' + new Date().getTime() + '-' + Math.random().toString(36).substring(2);
+
     this.client.webSocketFactory = () => {
       return new SockJS("http://localhost:8080/chat-websocket");
     }
@@ -45,6 +48,18 @@ export class ChatComponent implements OnInit {
         setTimeout(() => this.escribiendo = '', 3000);
       });
 
+      console.log(this.clienteId);  
+
+      this.client.subscribe(`/chat/historial/${this.clienteId}`, e => {
+        const historial = JSON.parse(e.body) as MensajeModel[];
+        this.mensajes = historial.map(m => {
+          m.fecha = new Date(m.fecha!);
+          return m;
+        }).reverse();
+      });
+
+      this.client.publish({destination: '/app/historial', body: this.clienteId});
+
       this.mensaje.tipo = 'NUEVO_USUARIO';
       this.client.publish({
         destination: '/app/mensaje',
@@ -55,6 +70,8 @@ export class ChatComponent implements OnInit {
     this.client.onDisconnect = (frame: any) => {
       console.log('Desconectados: ' + !this.client.connected + ' : ' + frame);
       this.conectado = false;
+      this.mensaje = new MensajeModel();
+      this.mensajes = [];
     }
 
   }
